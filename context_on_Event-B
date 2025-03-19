@@ -1,0 +1,11 @@
+CONTEXT
+    ctx     
+CONSTANTS
+    ON    
+    OFF    
+    SECOND    
+AXIOMS
+    axm1: ON = TRUE  
+    axm2: OFF = FALSE 
+    axm3: SECOND = 1000 
+END
