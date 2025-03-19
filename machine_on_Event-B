@@ -1,0 +1,91 @@
+MACHINE
+    mac 	
+SEES
+    ctx 
+VARIABLES
+    hands_under_dryer	 
+    dryer_control	 
+    state_Dryer	 
+    step	 
+    process	 
+    timer_Dryer	 
+INVARIANTS
+    inv1:hands_under_dryer ∈ BOOL 
+    inv2:dryer_control ∈ BOOL 
+    inv3:state_Dryer ∈ ℤ 
+    inv4:step ∈ ℕ 
+    inv5:process ∈ ℕ 
+    inv6:timer_Dryer ∈ ℕ 
+EVENTS
+    INITIALISATION:	 
+    THEN
+	act1:hands_under_dryer:=FALSE 
+	act2:dryer_control:=FALSE 
+	act3:state_Dryer:=0 
+	act4:step:=0 
+	act5:process:=0 	 
+	act6:timer_Dryer:=0 
+    END
+    Input:	 
+    ANY
+	in_port	 
+    WHERE
+	grd1:process = 0 
+	grd2:in_port ∈ BOOL 
+    THEN
+	act1:hands_under_dryer:=in_port 
+	act2:process:=1 
+    END
+    Wait1_1:	 
+    Wait1_2:	 
+    Work1_1:	 
+    WHERE
+	grd1:process = 1 
+	grd2:state_Dryer = 1 
+	grd3:hands_under_dryer = TRUE 
+	grd4:step = 0 
+    THEN
+	act1:timer_Dryer:=0 
+	act2:step:=step + 1 
+    END
+    Work1_2:	 
+    WHERE
+	grd1:process = 1 
+	grd2:state_Dryer = 1 
+	grd3:¬(hands_under_dryer = TRUE) 
+	grd4:step = 0 
+    THEN
+	act1:step:=step + 1 
+    END
+    Work2_1:	 
+    WHERE
+        grd1:process = 1 
+	grd2:state_Dryer = 1 
+	grd3:timer_Dryer > SECOND 
+	grd4:step = 1 
+    THEN
+	act1:dryer_control:=OFF 
+	act2:state_Dryer:=1 
+	act3:process:=(process + 1) mod 1 
+	act4:step:=0 
+	act5:timer_Dryer:=0 
+    END
+    Work2_2:	 
+    WHERE
+	grd1:process = 1 
+	grd2:state_Dryer = 1 
+	grd3:¬(timer_Dryer > SECOND) 
+	grd4:step = 1 
+    THEN
+	act1:timer_Dryer:=timer_Dryer + 1 
+	act2:step:=step + 1 
+    END
+    NextProcess:	 
+        WHERE
+	   grd1:process = 1 ∧ ((state_Dryer < 0) ∨ (state_Dryer = 0 ∧ step = 1) ∨ (state_Dryer = 1 ∧ step = 2)) 
+	THEN
+		act1:process:=(process+1) 
+                    mod 2 
+		act2:step:=0 
+		END
+	END
