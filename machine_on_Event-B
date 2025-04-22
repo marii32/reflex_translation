@@ -83,8 +83,8 @@ EVENTS
 	grd3: timer_Dryer > SECOND
 	grd4: step = 1
     THEN
-	act1: dryer_control ::== OFF
-	act2: state_Dryer := 1
+	act1: dryer_control := OFF
+	act2: state_Dryer := 0
 	act3: process := (process + 1) mod 2
 	act4: step := 0
 	act5: timer_Dryer := 0
